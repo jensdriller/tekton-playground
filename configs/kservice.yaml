@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
         - name: apiserver
-          image: jensdriller/backend-sql-test:v0.0.1
+          image: jensdriller/backend-sql:latest
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
