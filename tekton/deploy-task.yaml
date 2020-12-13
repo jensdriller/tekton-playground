@@ -3,14 +3,13 @@ kind: Task
 metadata:
   name: deploy-kubectl
 spec:
-  inputs:
-    resources:
-    - name: repo
+  resources:
+    inputs:
+    - name: workspace
       type: git
-    params:
-    - name: K8S_DIRECTORY_PATH
-      description: Path to the directory for kubectl apply -f
-      default: ./backend-sql/config/
+  params:
+  - name: K8S_DIRECTORY_PATH
+    description: Path to the directory for kubectl apply -f
   steps:
   - name: apply-config
     image: lachlanevenson/k8s-kubectl

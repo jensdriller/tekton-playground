@@ -1,5 +1,5 @@
 FROM golang:1.15.2-alpine  AS build
-WORKDIR /go/src/github.com/jensdriller/tekton-apiserver-build-and-push
+WORKDIR /go/src/github.com/jensdriller/tekton-playground
 ENV CGO_ENABLED=0
 COPY go.* .
 COPY *.go .
@@ -9,5 +9,5 @@ RUN go mod download \
 FROM alpine:latest  
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
-COPY --from=build /go/src/github.com/jensdriller/tekton-apiserver-build-and-push/app .
+COPY --from=build /go/src/github.com/jensdriller/tekton-playground/app .
 CMD ["./app"]

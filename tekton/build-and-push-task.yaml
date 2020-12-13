@@ -5,18 +5,16 @@ metadata:
 spec:
   resources:
     inputs:
-      - name: repo
+      - name: workspace
         type: git
-    params:
-      - name: PROJECT_PATH
-        description: The projct location within the repo.
-        default: ./backend-sql
-      - name: CONTEXT
-        description: The build context used by Docker.
-        default: /workspace/repo
-      - name: BUILDER_IMAGE
-        description: The image on which builds will run
-        default: backend-sql:latest # do we need a default?
+  params:
+    - name: DOCKERFILE
+      description: Path to the Dockerfile to build.
+    - name: CONTEXT
+      description: The build context used by Docker.
+      default: /workspace/repo
+    - name: BUILDER_IMAGE
+      description: The image on which builds will run
   steps:
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:v0.19.0
@@ -25,6 +23,6 @@ spec:
           value: /tekton/home/.docker
       command:
         - /kaniko/executor
-        - --dockerfile=$(inputs.params.PROJECT_PATH)/Dockerfile
+        - --dockerfile=$(inputs.params.DOCKERFILE)
         - --context=$(inputs.params.CONTEXT)
         - --destination=$(inputs.params.BUILDER_IMAGE)

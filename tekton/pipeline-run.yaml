@@ -7,7 +7,7 @@ spec:
   pipelineRef:
     name: backend-sql
   resources:
-    - name: repo
+    - name: workspace
       resourceSpec:
         type: git
         params:
