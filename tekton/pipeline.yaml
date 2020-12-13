@@ -1,0 +1,42 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: backend-sql
+spec:
+  params:
+    - name: BUILDER_IMAGE
+      description: The image on which builds will run
+      default: backend-sql:latest
+    - name: PROJECT_PATH
+      description: The projct location within the repo.
+      default: ./backend-sql
+    - name: K8S_DIRECTORY_PATH
+      description: The projct location within the repo.
+      default: ./backend-sql/config
+  resources:
+    - name: repo
+      type: git
+  tasks:
+    - name: build-and-push
+      taskRef:
+        name: build-and-push
+      params:
+        - name: PROJECT_PATH
+          value: $(params.PROJECT_PATH)
+        - name: BUILDER_IMAGE
+          value: $(params.BUILDER_IMAGE)
+      resources:
+        inputs:
+          - name: repo
+            resource: repo
+    - name: deploy
+      runAfter: [build-and-push]
+      taskRef:
+        name: deploy-kubectl
+      resources:
+        inputs:
+          - name: repo
+            resource: repo
+      params:
+        - name: K8S_DIRECTORY_PATH
+          value: $(params.K8S_DIRECTORY_PATH)

@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: backend-sql
+spec:
+  serviceAccountName: build-bot
+  pipelineRef:
+    name: backend-sql
+  resources:
+    - name: repo
+      resourceSpec:
+        type: git
+        params:
+          - name: revision
+            value: main
+          - name: url
+            value: https://github.com/jensdriller/tekton-playground

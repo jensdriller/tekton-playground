@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-and-push
+spec:
+  resources:
+    inputs:
+      - name: repo
+        type: git
+    params:
+      - name: PROJECT_PATH
+        description: The projct location within the repo.
+        default: ./backend-sql
+      - name: CONTEXT
+        description: The build context used by Docker.
+        default: /workspace/repo
+      - name: BUILDER_IMAGE
+        description: The image on which builds will run
+        default: backend-sql:latest # do we need a default?
+  steps:
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor:v0.19.0
+      env:
+        - name: DOCKER_CONFIG
+          value: /tekton/home/.docker
+      command:
+        - /kaniko/executor
+        - --dockerfile=$(inputs.params.PROJECT_PATH)/Dockerfile
+        - --context=$(inputs.params.CONTEXT)
+        - --destination=$(inputs.params.BUILDER_IMAGE)
