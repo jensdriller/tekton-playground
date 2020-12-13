@@ -5,7 +5,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: backend-sql-v0.0.1
+      name: backend-sql-v1
     spec:
       containers:
         - name: apiserver
